@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="TicToe.Infinite.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:TicToe.Infinite.Pages"
+    xmlns:sf="clr-namespace:Syncfusion.Maui.Toolkit.SegmentedControl;assembly=Syncfusion.Maui.Toolkit"
+    xmlns:strings="clr-namespace:TicToe.Infinite.Resources.Strings"
+    Title="{x:Static strings:AppResources.AppTitle}"
+    Shell.FlyoutBehavior="Flyout">
+
+    <ShellContent
+        Title="{x:Static strings:AppResources.AppShell_Game}"
+        ContentTemplate="{DataTemplate pages:MainPage}"
+        Icon="{StaticResource IconGame}"
+        Route="main" />
+
+    <ShellContent
+        Title="{x:Static strings:AppResources.AppShell_Dashboard}"
+        ContentTemplate="{DataTemplate pages:DashboardPage}"
+        Icon="{StaticResource IconDashboard}"
+        Route="dashboard" />
+
+    <Shell.FlyoutFooter>
+        <Grid Padding="15">
+            <sf:SfSegmentedControl
+                x:Name="ThemeSegmentedControl"
+                HorizontalOptions="Center"
+                SegmentHeight="40"
+                SegmentWidth="40"
+                SelectionChanged="SfSegmentedControl_SelectionChanged"
+                VerticalOptions="Center">
+                <sf:SfSegmentedControl.ItemsSource>
+                    <x:Array Type="{x:Type sf:SfSegmentItem}">
+                        <sf:SfSegmentItem ImageSource="{StaticResource IconLight}" SemanticProperties.Description="{x:Static strings:SemanticDescriptions.AppShell_LightMode}" />
+                        <sf:SfSegmentItem ImageSource="{StaticResource IconDark}" SemanticProperties.Description="{x:Static strings:SemanticDescriptions.AppShell_DarkMode}" />
+                    </x:Array>
+                </sf:SfSegmentedControl.ItemsSource>
+            </sf:SfSegmentedControl>
+        </Grid>
+    </Shell.FlyoutFooter>
+
+</Shell>

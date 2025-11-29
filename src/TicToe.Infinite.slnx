@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="TicToe.Infinite.AppHost/TicToe.Infinite.AppHost.csproj" />
+  <Project Path="TicToe.Infinite.ServiceDefaults/TicToe.Infinite.ServiceDefaults.csproj" />
+  <Project Path="TicToe.Infinite/TicToe.Infinite.csproj">
+    <Deploy />
+  </Project>
+</Solution>

@@ -1,0 +1,215 @@
+﻿<ContentPage
+    x:Class="TicToe.Infinite.Pages.MainPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:strings="clr-namespace:TicToe.Infinite.Resources.Strings">
+
+    <ContentPage.Resources>
+        <Style Class="Cell" TargetType="Border">
+            <Setter Property="BackgroundColor" Value="#1E1E1E" />
+            <Setter Property="StrokeThickness" Value="2" />
+            <Setter Property="Stroke" Value="#444" />
+            <Setter Property="StrokeShape">
+                <Setter.Value>
+                    <RoundRectangle CornerRadius="15" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="Shadow">
+                <Setter.Value>
+                    <Shadow
+                        Brush="#00000055"
+                        Radius="10"
+                        Offset="5,5" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style Class="SymbolText" TargetType="Label">
+            <Setter Property="FontSize" Value="48" />
+            <Setter Property="HorizontalTextAlignment" Value="Center" />
+            <Setter Property="VerticalTextAlignment" Value="Center" />
+        </Style>
+    </ContentPage.Resources>
+
+    <VerticalStackLayout Padding="20" Spacing="25">
+        <Label
+            x:Name="TurnLabel"
+            HorizontalOptions="Center"
+            Style="{StaticResource LargeTitle}">
+            <Label.Text>
+                <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                    <Binding Source="{x:Static strings:AppResources.MainPage_PlayersTurn}" />
+                    <Binding Source="X" />
+                </MultiBinding>
+            </Label.Text>
+        </Label>
+        <Grid
+            x:Name="BoardGrid"
+            ColumnDefinitions="*,*,*"
+            HeightRequest="350"
+            HorizontalOptions="Center"
+            RowDefinitions="*,*,*"
+            VerticalOptions="Center"
+            WidthRequest="350">
+            <!--  9 cells  -->
+            <Border
+                Grid.Row="0"
+                Grid.Column="0"
+                StyleClass="Cell">
+                <SemanticProperties.Description>
+                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                        <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
+                        <Binding Source="{x:Static strings:AppResources.First}" />
+                        <Binding Source="{x:Static strings:AppResources.First}" />
+                    </MultiBinding>
+                </SemanticProperties.Description>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Cell_Tapped" />
+                </Border.GestureRecognizers>
+                <Label StyleClass="SymbolText" />
+            </Border>
+            <Border
+                Grid.Row="0"
+                Grid.Column="1"
+                StyleClass="Cell">
+                <SemanticProperties.Description>
+                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                        <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
+                        <Binding Source="{x:Static strings:AppResources.Second}" />
+                        <Binding Source="{x:Static strings:AppResources.First}" />
+                    </MultiBinding>
+                </SemanticProperties.Description>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Cell_Tapped" />
+                </Border.GestureRecognizers>
+                <Label StyleClass="SymbolText" />
+            </Border>
+            <Border
+                Grid.Row="0"
+                Grid.Column="2"
+                StyleClass="Cell">
+                <SemanticProperties.Description>
+                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                        <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
+                        <Binding Source="{x:Static strings:AppResources.Third}" />
+                        <Binding Source="{x:Static strings:AppResources.First}" />
+                    </MultiBinding>
+                </SemanticProperties.Description>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Cell_Tapped" />
+                </Border.GestureRecognizers>
+                <Label StyleClass="SymbolText" />
+            </Border>
+            <Border
+                Grid.Row="1"
+                Grid.Column="0"
+                StyleClass="Cell">
+                <SemanticProperties.Description>
+                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                        <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
+                        <Binding Source="{x:Static strings:AppResources.First}" />
+                        <Binding Source="{x:Static strings:AppResources.Second}" />
+                    </MultiBinding>
+                </SemanticProperties.Description>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Cell_Tapped" />
+                </Border.GestureRecognizers>
+                <Label StyleClass="SymbolText" />
+            </Border>
+            <Border
+                Grid.Row="1"
+                Grid.Column="1"
+                StyleClass="Cell">
+                <SemanticProperties.Description>
+                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                        <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
+                        <Binding Source="{x:Static strings:AppResources.Second}" />
+                        <Binding Source="{x:Static strings:AppResources.Second}" />
+                    </MultiBinding>
+                </SemanticProperties.Description>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Cell_Tapped" />
+                </Border.GestureRecognizers>
+                <Label StyleClass="SymbolText" />
+            </Border>
+            <Border
+                Grid.Row="1"
+                Grid.Column="2"
+                StyleClass="Cell">
+                <SemanticProperties.Description>
+                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                        <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
+                        <Binding Source="{x:Static strings:AppResources.Third}" />
+                        <Binding Source="{x:Static strings:AppResources.Second}" />
+                    </MultiBinding>
+                </SemanticProperties.Description>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Cell_Tapped" />
+                </Border.GestureRecognizers>
+                <Label StyleClass="SymbolText" />
+            </Border>
+            <Border
+                Grid.Row="2"
+                Grid.Column="0"
+                StyleClass="Cell">
+                <SemanticProperties.Description>
+                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                        <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
+                        <Binding Source="{x:Static strings:AppResources.First}" />
+                        <Binding Source="{x:Static strings:AppResources.Third}" />
+                    </MultiBinding>
+                </SemanticProperties.Description>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Cell_Tapped" />
+                </Border.GestureRecognizers>
+                <Label StyleClass="SymbolText" />
+            </Border>
+            <Border
+                Grid.Row="2"
+                Grid.Column="1"
+                StyleClass="Cell">
+                <SemanticProperties.Description>
+                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                        <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
+                        <Binding Source="{x:Static strings:AppResources.Second}" />
+                        <Binding Source="{x:Static strings:AppResources.Third}" />
+                    </MultiBinding>
+                </SemanticProperties.Description>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Cell_Tapped" />
+                </Border.GestureRecognizers>
+                <Label StyleClass="SymbolText" />
+            </Border>
+            <Border
+                Grid.Row="2"
+                Grid.Column="2"
+                StyleClass="Cell">
+                <SemanticProperties.Description>
+                    <MultiBinding Converter="{StaticResource StringFormatConverter}">
+                        <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
+                        <Binding Source="{x:Static strings:AppResources.Third}" />
+                        <Binding Source="{x:Static strings:AppResources.Third}" />
+                    </MultiBinding>
+                </SemanticProperties.Description>
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Cell_Tapped" />
+                </Border.GestureRecognizers>
+                <Label StyleClass="SymbolText" />
+            </Border>
+        </Grid>
+        <Button
+            Clicked="Reset_Clicked"
+            HeightRequest="50"
+            SemanticProperties.Description="{x:Static strings:SemanticDescriptions.MainPage_ResetButton}"
+            Text="{x:Static strings:AppResources.MainPage_ResetGame}" />
+        <HorizontalStackLayout Spacing="10">
+            <Switch x:Name="AISwitch" SemanticProperties.Description="{x:Static strings:SemanticDescriptions.MainPage_AISwitch}" />
+            <Label
+                Style="{StaticResource Body1}"
+                Text="{x:Static strings:AppResources.MainPage_EnableAI}"
+                VerticalOptions="Center" />
+        </HorizontalStackLayout>
+    </VerticalStackLayout>
+
+</ContentPage>

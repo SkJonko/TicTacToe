@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tic Tac Toe app icon">
+	<defs>
+		<style>
+			.bg { fill: #512BD4; }
+			.grid { stroke: #FFFFFF; stroke-width: 64; stroke-linecap: round; }
+			.mark-x { stroke: #FFFFFF; stroke-width: 50; stroke-linecap: round; stroke-linejoin: round; }
+			.mark-o { stroke: #FFFFFF; stroke-width: 50; fill: none; }
+		</style>
+	</defs>
+
+	<!-- Rounded square background -->
+	<rect x="32" y="32" rx="140" ry="140" width="960" height="960" class="bg" />
+
+	<!-- 3x3 grid (two vertical and two horizontal lines) -->
+	<!-- vertical lines -->
+	<line x1="370" y1="200" x2="370" y2="824" class="grid" />
+	<line x1="654" y1="200" x2="654" y2="824" class="grid" />
+
+	<!-- horizontal lines -->
+	<line x1="200" y1="370" x2="824" y2="370" class="grid" />
+	<line x1="200" y1="654" x2="824" y2="654" class="grid" />
+
+	<!-- X marks (top-left and bottom-right) -->
+	<!-- top-left X centered around (256,256) -->
+	<g transform="translate(220,220)">
+		<line x1="-80" y1="-80" x2="80" y2="75" class="mark-x" />
+		<line x1="-80" y1="80" x2="85" y2="-80" class="mark-x" />
+	</g>
+
+	<!-- bottom-right X centered around (768,768) -->
+	<g transform="translate(805,805)">
+		<line x1="-75" y1="-80" x2="80" y2="80" class="mark-x" />
+		<line x1="-80" y1="80" x2="85" y2="-80" class="mark-x" />
+	</g>
+
+	<!-- O mark in center cell (512,512) -->
+	<g transform="translate(512,512)">
+		<circle r="70" class="mark-o" />
+	</g>
+</svg>
