@@ -20,15 +20,27 @@
                 HeightRequest="250">
 
                 <chart:SfCartesianChart.Legend>
-                    <chart:ChartLegend />
+                    <chart:ChartLegend>
+                        <chart:ChartLegend.LabelStyle>
+                            <chart:ChartLegendLabelStyle TextColor="{AppThemeBinding Light={StaticResource DarkOnLightBackground}, Dark={StaticResource LightOnDarkBackground}}" />
+                        </chart:ChartLegend.LabelStyle>
+                    </chart:ChartLegend>
                 </chart:SfCartesianChart.Legend>
 
                 <chart:SfCartesianChart.XAxes>
-                    <chart:CategoryAxis />
+                    <chart:CategoryAxis>
+                        <chart:CategoryAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle TextColor="{AppThemeBinding Light={StaticResource DarkOnLightBackground}, Dark={StaticResource LightOnDarkBackground}}" />
+                        </chart:CategoryAxis.LabelStyle>
+                    </chart:CategoryAxis>
                 </chart:SfCartesianChart.XAxes>
 
                 <chart:SfCartesianChart.YAxes>
-                    <chart:NumericalAxis />
+                    <chart:NumericalAxis>
+                        <chart:NumericalAxis.LabelStyle>
+                            <chart:ChartAxisLabelStyle TextColor="{AppThemeBinding Light={StaticResource DarkOnLightBackground}, Dark={StaticResource LightOnDarkBackground}}" />
+                        </chart:NumericalAxis.LabelStyle>
+                    </chart:NumericalAxis>
                 </chart:SfCartesianChart.YAxes>
 
                 <chart:ColumnSeries

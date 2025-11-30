@@ -103,9 +103,11 @@ public class TicToeRepository
     private async Task Init()
     {
         if (_hasBeenInitialized)
-            return;
+		{
+			return;
+		}
 
-        await using var connection = new SqliteConnection(Constants.DatabasePath);
+		await using var connection = new SqliteConnection(Constants.DatabasePath);
         await connection.OpenAsync();
 
         try
@@ -123,7 +125,7 @@ public class TicToeRepository
         }
         catch (Exception ex)
         {
-            //_logger.LogError(ex, "Error creating tables");
+            _logger.LogError(ex, "Error creating tables");
             throw;
         }
 

@@ -20,19 +20,23 @@ public partial class MainPage : ContentPage
 
     private async void Cell_Tapped(object sender, TappedEventArgs e)
     {
-        if (_isRunning)
-            return;
+		if (_isRunning)
+		{
+			return;
+		}
 
-        _isRunning = true;
+		_isRunning = true;
 
         var border = (Border)sender;
         int r = Grid.GetRow(border);
         int c = Grid.GetColumn(border);
 
         if (!_game.MakeMove(r, c))
-            return;
+		{
+			return;
+		}
 
-        AnimatePlace((Label)border.Content, _game.Board[r, c]);
+		AnimatePlace((Label)border.Content, _game.Board[r, c]);
 
         if (_game.Won)
         {
@@ -44,9 +48,11 @@ public partial class MainPage : ContentPage
 
         // AI logic
         if (AISwitch.IsToggled && _game.CurrentPlayer == _game.AIPlayer)
-            await DoAIMoveAsync();
+		{
+			await DoAIMoveAsync();
+		}
 
-        _isRunning = false;
+		_isRunning = false;
     }
 
     private async Task DoAIMoveAsync()
@@ -55,10 +61,12 @@ public partial class MainPage : ContentPage
 
         var move = _game.GetAIMove();
 
-        if (move is null)
-            return;
+		if (move is null)
+		{
+			return;
+		}
 
-        var (r, c) = move.Value;
+		var (r, c) = move.Value;
         _game.MakeMove(r, c);
 
         var cell = GetCell(r, c);
@@ -103,9 +111,12 @@ public partial class MainPage : ContentPage
         while (oldCell == cell)
         {
             var label = (Label)cell.Content;
-            if (string.IsNullOrEmpty(label.Text)) return;
+			if (string.IsNullOrEmpty(label.Text))
+			{
+				return;
+			}
 
-            await label.ScaleToAsync(1.2, 200, Easing.CubicInOut);
+			await label.ScaleToAsync(1.2, 200, Easing.CubicInOut);
             await Task.Delay(300);
             await label.ScaleToAsync(1.0, 200, Easing.CubicInOut);
         }
@@ -138,7 +149,6 @@ public partial class MainPage : ContentPage
     {
         _game.Reset();
         TurnLabel.Text = string.Format(AppResources.MainPage_PlayersTurn, "X");
-        TurnLabel.TextColor = Colors.White;
 
         foreach (var border in BoardGrid.Children.OfType<Border>())
         {
