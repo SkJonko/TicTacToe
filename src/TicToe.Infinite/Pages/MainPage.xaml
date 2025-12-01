@@ -17,10 +17,7 @@
             <Setter Property="Margin" Value="5" />
             <Setter Property="Shadow">
                 <Setter.Value>
-                    <Shadow
-                        Brush="#00000055"
-                        Radius="10"
-                        Offset="5,5" />
+                    <Shadow Brush="#00000055" Radius="10" Offset="5,5" />
                 </Setter.Value>
             </Setter>
         </Style>
@@ -33,10 +30,7 @@
     </ContentPage.Resources>
 
     <VerticalStackLayout Padding="20" Spacing="25">
-        <Label
-            x:Name="TurnLabel"
-            HorizontalOptions="Center"
-            Style="{StaticResource LargeTitle}">
+        <Label x:Name="TurnLabel" HorizontalOptions="Center" Style="{StaticResource LargeTitle}">
             <Label.Text>
                 <MultiBinding Converter="{StaticResource StringFormatConverter}">
                     <Binding Source="{x:Static strings:AppResources.MainPage_PlayersTurn}" />
@@ -53,10 +47,7 @@
             VerticalOptions="Center"
             WidthRequest="350">
             <!--  9 cells  -->
-            <Border
-                Grid.Row="0"
-                Grid.Column="0"
-                StyleClass="Cell">
+            <Border Grid.Row="0" Grid.Column="0" StyleClass="Cell">
                 <SemanticProperties.Description>
                     <MultiBinding Converter="{StaticResource StringFormatConverter}">
                         <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
@@ -69,10 +60,7 @@
                 </Border.GestureRecognizers>
                 <Label StyleClass="SymbolText" />
             </Border>
-            <Border
-                Grid.Row="0"
-                Grid.Column="1"
-                StyleClass="Cell">
+            <Border Grid.Row="0" Grid.Column="1" StyleClass="Cell">
                 <SemanticProperties.Description>
                     <MultiBinding Converter="{StaticResource StringFormatConverter}">
                         <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
@@ -85,10 +73,7 @@
                 </Border.GestureRecognizers>
                 <Label StyleClass="SymbolText" />
             </Border>
-            <Border
-                Grid.Row="0"
-                Grid.Column="2"
-                StyleClass="Cell">
+            <Border Grid.Row="0" Grid.Column="2" StyleClass="Cell">
                 <SemanticProperties.Description>
                     <MultiBinding Converter="{StaticResource StringFormatConverter}">
                         <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
@@ -101,10 +86,7 @@
                 </Border.GestureRecognizers>
                 <Label StyleClass="SymbolText" />
             </Border>
-            <Border
-                Grid.Row="1"
-                Grid.Column="0"
-                StyleClass="Cell">
+            <Border Grid.Row="1" Grid.Column="0" StyleClass="Cell">
                 <SemanticProperties.Description>
                     <MultiBinding Converter="{StaticResource StringFormatConverter}">
                         <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
@@ -117,10 +99,7 @@
                 </Border.GestureRecognizers>
                 <Label StyleClass="SymbolText" />
             </Border>
-            <Border
-                Grid.Row="1"
-                Grid.Column="1"
-                StyleClass="Cell">
+            <Border Grid.Row="1" Grid.Column="1" StyleClass="Cell">
                 <SemanticProperties.Description>
                     <MultiBinding Converter="{StaticResource StringFormatConverter}">
                         <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
@@ -133,10 +112,7 @@
                 </Border.GestureRecognizers>
                 <Label StyleClass="SymbolText" />
             </Border>
-            <Border
-                Grid.Row="1"
-                Grid.Column="2"
-                StyleClass="Cell">
+            <Border Grid.Row="1" Grid.Column="2" StyleClass="Cell">
                 <SemanticProperties.Description>
                     <MultiBinding Converter="{StaticResource StringFormatConverter}">
                         <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
@@ -149,10 +125,7 @@
                 </Border.GestureRecognizers>
                 <Label StyleClass="SymbolText" />
             </Border>
-            <Border
-                Grid.Row="2"
-                Grid.Column="0"
-                StyleClass="Cell">
+            <Border Grid.Row="2" Grid.Column="0" StyleClass="Cell">
                 <SemanticProperties.Description>
                     <MultiBinding Converter="{StaticResource StringFormatConverter}">
                         <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
@@ -165,10 +138,7 @@
                 </Border.GestureRecognizers>
                 <Label StyleClass="SymbolText" />
             </Border>
-            <Border
-                Grid.Row="2"
-                Grid.Column="1"
-                StyleClass="Cell">
+            <Border Grid.Row="2" Grid.Column="1" StyleClass="Cell">
                 <SemanticProperties.Description>
                     <MultiBinding Converter="{StaticResource StringFormatConverter}">
                         <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
@@ -181,10 +151,7 @@
                 </Border.GestureRecognizers>
                 <Label StyleClass="SymbolText" />
             </Border>
-            <Border
-                Grid.Row="2"
-                Grid.Column="2"
-                StyleClass="Cell">
+            <Border Grid.Row="2" Grid.Column="2" StyleClass="Cell">
                 <SemanticProperties.Description>
                     <MultiBinding Converter="{StaticResource StringFormatConverter}">
                         <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
@@ -205,10 +172,7 @@
             Text="{x:Static strings:AppResources.MainPage_ResetGame}" />
         <HorizontalStackLayout Spacing="10">
             <Switch x:Name="AISwitch" SemanticProperties.Description="{x:Static strings:SemanticDescriptions.MainPage_AISwitch}" />
-            <Label
-                Style="{StaticResource Body1}"
-                Text="{x:Static strings:AppResources.MainPage_EnableAI}"
-                VerticalOptions="Center" />
+            <Label Style="{StaticResource Body1}" Text="{x:Static strings:AppResources.MainPage_EnableAI}" VerticalOptions="Center" />
         </HorizontalStackLayout>
     </VerticalStackLayout>
 

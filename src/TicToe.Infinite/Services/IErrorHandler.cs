@@ -9,5 +9,5 @@ public interface IErrorHandler
 	/// Handle error in UI.
 	/// </summary>
 	/// <param name="ex">Exception being thrown.</param>
-	void HandleError(Exception ex);
+	public void HandleError(Exception ex);
 }

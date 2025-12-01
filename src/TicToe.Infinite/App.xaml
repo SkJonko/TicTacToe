@@ -7,7 +7,6 @@
     xmlns:local="clr-namespace:TicToe.Infinite">
     <Application.Resources>
         <ResourceDictionary>
-            <converters:SymbolColorConverter x:Key="SymbolColorConverter" />
             <converters:StringFormatConverter x:Key="StringFormatConverter" />
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />

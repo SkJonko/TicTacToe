@@ -3,7 +3,7 @@
 /// <summary>
 /// Service helper to discover services from the DI container.
 /// </summary>
-class ServiceHelper
+public class ServiceHelper
 {
 
     /// <summary>

@@ -17,22 +17,28 @@ public class StringFormatConverter : IMultiValueConverter
     /// <returns></returns>
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
     {
-        if (values == null || values.Length == 0)
-            return string.Empty;
+		if (values == null || values.Length == 0)
+		{
+			return string.Empty;
+		}
 
-        // First value MUST be the message from .resx
-        string baseMessage = values[0]?.ToString() ?? string.Empty;
+		// First value MUST be the message from .resx
+		string baseMessage = values[0]?.ToString() ?? string.Empty;
 
         if (string.IsNullOrWhiteSpace(baseMessage))
-            return string.Empty;
+		{
+			return string.Empty;
+		}
 
-        // Remaining bindings are format arguments
-        object[] formatArgs = new object[values.Length - 1];
+		// Remaining bindings are format arguments
+		object[] formatArgs = new object[values.Length - 1];
 
         for (int i = 1; i < values.Length; i++)
-            formatArgs[i - 1] = values[i];
+		{
+			formatArgs[i - 1] = values[i];
+		}
 
-        try
+		try
         {
             return string.Format(baseMessage, formatArgs);
         }

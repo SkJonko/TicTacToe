@@ -34,14 +34,18 @@ public class TicToeGameService
     /// <returns>A <see cref="bool"/> to indicates if the moves was successful completed.</returns>
     public bool MakeMove(int row, int col)
     {
-        if (GameOver) 
-            return false;
+		if (GameOver)
+		{
+			return false;
+		}
 
-        if (Board[row, col] != '\0') 
-            return false;
+		if (Board[row, col] != '\0')
+		{
+			return false;
+		}
 
-        // Remove oldest if exceeding capacity
-        if (moveOrder.Count >= 6)
+		// Remove oldest if exceeding capacity
+		if (moveOrder.Count >= 6)
         {
             var oldest = moveOrder.Dequeue();
             Board[oldest.r, oldest.c] = '\0';
@@ -95,15 +99,24 @@ public class TicToeGameService
     public (int r, int c)? GetAIMove()
     {
         var free = new List<(int r, int c)>();
+
         for (int r = 0; r < 3; r++)
-            for (int c = 0; c < 3; c++)
-                if (Board[r, c] == '\0')
-                    free.Add((r, c));
+		{
+			for (int c = 0; c < 3; c++)
+			{
+				if (Board[r, c] == '\0')
+				{
+					free.Add((r, c));
+				}
+			}
+		}
 
-        if (free.Count == 0)
-            return null;
+		if (free.Count == 0)
+		{
+			return null;
+		}
 
-        var rand = new Random();
+		var rand = new Random();
 
         return free[rand.Next(free.Count)];
     }
@@ -111,19 +124,26 @@ public class TicToeGameService
     private bool CheckWin(char p)
     {
         for (int r = 0; r < 3; r++)
-            if (Board[r, 0] == p && Board[r, 1] == p && Board[r, 2] == p)
-                return true;
+		{
+			if (Board[r, 0] == p && Board[r, 1] == p && Board[r, 2] == p)
+			{
+				return true;
+			}
+		}
 
-        for (int c = 0; c < 3; c++)
-            if (Board[0, c] == p && Board[1, c] == p && Board[2, c] == p)
-                return true;
+		for (int c = 0; c < 3; c++)
+		{
+			if (Board[0, c] == p && Board[1, c] == p && Board[2, c] == p)
+			{
+				return true;
+			}
+		}
 
-        if (Board[0, 0] == p && Board[1, 1] == p && Board[2, 2] == p) 
-            return true;
+		if (Board[0, 0] == p && Board[1, 1] == p && Board[2, 2] == p)
+		{
+			return true;
+		}
 
-        if (Board[0, 2] == p && Board[1, 1] == p && Board[2, 0] == p) 
-            return true;
-
-        return false;
-    }
+		return Board[0, 2] == p && Board[1, 1] == p && Board[2, 0] == p;
+	}
 }
