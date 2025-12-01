@@ -36,8 +36,8 @@ public partial class DashboardPageModel : BasePageModel
     #region Commands
 
     [RelayCommand]
-    private Task AppearingAsync()
-        => LoadData();
+    private async Task AppearingAsync()
+        => await LoadData();
 
     #endregion
 

@@ -9,17 +9,13 @@
     xmlns:strings="clr-namespace:TicToe.Infinite.Resources.Strings"
     Margin="0,12"
     x:DataType="pageModels:DashboardPageModel"
-    HeightRequest="{OnIdiom 300,
-                            Phone=200}"
+    HeightRequest="{OnIdiom 300, Phone=200}"
     Style="{StaticResource CardStyle}">
 
     <shimmer:SfShimmer BackgroundColor="Transparent" IsActive="{Binding IsBusy}">
         <shimmer:SfShimmer.CustomView>
             <Grid>
-                <BoxView
-                    CornerRadius="12"
-                    Style="{StaticResource ShimmerCustomViewStyle}"
-                    VerticalOptions="Fill" />
+                <BoxView CornerRadius="12" Style="{StaticResource ShimmerCustomViewStyle}" VerticalOptions="Fill" />
             </Grid>
         </shimmer:SfShimmer.CustomView>
         <shimmer:SfShimmer.Content>
@@ -30,8 +26,7 @@
                     InnerRadius="0.7"
                     ItemsSource="{Binding WinnerData}"
                     PaletteBrushes="{Binding WinnerColors}"
-                    Radius="{OnIdiom 0.6,
-                                     Phone=0.5}"
+                    Radius="{OnIdiom 0.6, Phone=0.5}"
                     ShowDataLabels="True"
                     XBindingPath="Player"
                     YBindingPath="Count">

@@ -27,31 +27,19 @@
     <x:Double x:Key="size560">56</x:Double>
 
     <!--  https://fluent2.microsoft.design/typography/  -->
-    <OnIdiom
-        x:Key="IconSize"
-        x:TypeArguments="x:Double"
-        Default="20">
+    <OnIdiom x:Key="IconSize" x:TypeArguments="x:Double" Default="20">
         <OnIdiom.Desktop>32</OnIdiom.Desktop>
     </OnIdiom>
 
-    <OnIdiom
-        x:Key="IconSizeSmall"
-        x:TypeArguments="x:Double"
-        Default="12">
+    <OnIdiom x:Key="IconSizeSmall" x:TypeArguments="x:Double" Default="12">
         <OnIdiom.Desktop>18</OnIdiom.Desktop>
     </OnIdiom>
 
-    <OnIdiom
-        x:Key="LayoutPadding"
-        x:TypeArguments="Thickness"
-        Default="15">
+    <OnIdiom x:Key="LayoutPadding" x:TypeArguments="Thickness" Default="15">
         <OnIdiom.Desktop>30</OnIdiom.Desktop>
     </OnIdiom>
 
-    <OnIdiom
-        x:Key="LayoutSpacing"
-        x:TypeArguments="x:Double"
-        Default="5">
+    <OnIdiom x:Key="LayoutSpacing" x:TypeArguments="x:Double" Default="5">
         <OnIdiom.Desktop>15</OnIdiom.Desktop>
     </OnIdiom>
 
@@ -241,16 +229,8 @@
         <Setter Property="Padding" Value="{OnIdiom 15, Desktop=20}" />
     </Style>
 
-    <sf:LabelStyle
-        x:Key="lightThemeLabelStyle"
-        FontSize="{OnIdiom 18,
-                           Desktop=24}"
-        TextColor="{StaticResource DarkOnLightBackground}" />
-    <sf:LabelStyle
-        x:Key="darkThemeLabelStyle"
-        FontSize="{OnIdiom 18,
-                           Desktop=24}"
-        TextColor="{StaticResource LightOnDarkBackground}" />
+    <sf:LabelStyle x:Key="lightThemeLabelStyle" FontSize="{OnIdiom 18, Desktop=24}" TextColor="{StaticResource DarkOnLightBackground}" />
+    <sf:LabelStyle x:Key="darkThemeLabelStyle" FontSize="{OnIdiom 18, Desktop=24}" TextColor="{StaticResource LightOnDarkBackground}" />
     <Style TargetType="sf:SfTextInputLayout">
         <Setter Property="ContainerType" Value="Outlined" />
         <Setter Property="ContainerBackground" Value="Transparent" />
