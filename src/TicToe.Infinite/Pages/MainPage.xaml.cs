@@ -148,9 +148,11 @@ public partial class MainPage : ContentPage
     private void ResetGame()
     {
         _game.Reset();
-        TurnLabel.Text = string.Format(AppResources.MainPage_PlayersTurn, "X");
 
-        foreach (var border in BoardGrid.Children.OfType<Border>())
+        TurnLabel.Text = string.Format(AppResources.MainPage_PlayersTurn, "X");
+		TurnLabel.TextColor = Application.Current!.UserAppTheme == AppTheme.Light ? Application.Current!.Resources["DarkOnLightBackground"] as Color : Application.Current!.Resources["LightOnDarkBackground"] as Color;
+
+		foreach (var border in BoardGrid.Children.OfType<Border>())
         {
             ((Label)border.Content).Text = "";
         }
