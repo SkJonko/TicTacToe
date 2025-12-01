@@ -124,39 +124,55 @@ public partial class MainPage : ContentPage
 
     private async Task AnimateWinAsync(char winner)
     {
-        TurnLabel.Text = string.Format(AppResources.MainPage_PlayerWins, winner);
-        TurnLabel.TextColor = Colors.Gold;
+		var tasks = new List<Task>()
+		{
+			ConfettiAsync(),
+			AnimateLabel(winner),
+			_ticToeRepository.SaveItemAsync(new Game()
+			{
+				Winner = winner.ToString(),
+				Moves = _game.MovesMade
+			})
+		};
 
-        for (int i = 0; i < 3; i++)
-        {
-            await TurnLabel.ScaleToAsync(1.2, 150);
-            await TurnLabel.ScaleToAsync(1.0, 150);
-        }
-
-        await _ticToeRepository.SaveItemAsync(new Game()
-        {
-            Winner = winner.ToString(),
-            Moves = _game.MovesMade
-        });
+		await Task.WhenAll(tasks);
     }
+
+	private async Task AnimateLabel(char winner)
+	{
+		TurnLabel.Text = string.Format(AppResources.MainPage_PlayerWins, winner);
+		TurnLabel.TextColor = Colors.Gold;
+
+		for (int i = 0; i < 3; i++)
+		{
+			await TurnLabel.ScaleToAsync(1.2, 150);
+			await TurnLabel.ScaleToAsync(1.0, 150);
+		}
+	}
+
+	private async Task ConfettiAsync()
+	{
+		Confetti.IsVisible = true;
+		Confetti.IsAnimationEnabled = true;
+
+		await Task.Delay(4000);
+
+		Confetti.IsVisible = false;
+		Confetti.IsAnimationEnabled = false;
+	}
 
     private void Reset_Clicked(object sender, EventArgs e)
-    {
-        ResetGame();
-    }
+	{
+		_game.Reset();
 
-    private void ResetGame()
-    {
-        _game.Reset();
-
-        TurnLabel.Text = string.Format(AppResources.MainPage_PlayersTurn, "X");
+		TurnLabel.Text = string.Format(AppResources.MainPage_PlayersTurn, "X");
 		TurnLabel.TextColor = Application.Current!.UserAppTheme == AppTheme.Light ? Application.Current!.Resources["DarkOnLightBackground"] as Color : Application.Current!.Resources["LightOnDarkBackground"] as Color;
 
 		foreach (var border in BoardGrid.Children.OfType<Border>())
-        {
-            ((Label)border.Content).Text = "";
-        }
+		{
+			((Label)border.Content).Text = "";
+		}
 
-        _isRunning = false;
-    }
+		_isRunning = false;
+	}
 }

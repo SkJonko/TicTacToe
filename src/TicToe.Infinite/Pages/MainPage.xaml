@@ -2,6 +2,7 @@
     x:Class="TicToe.Infinite.Pages.MainPage"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:skia="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
     xmlns:strings="clr-namespace:TicToe.Infinite.Resources.Strings">
 
     <ContentPage.Resources>
@@ -164,6 +165,20 @@
                 </Border.GestureRecognizers>
                 <Label StyleClass="SymbolText" />
             </Border>
+            <skia:SKLottieView
+                x:Name="Confetti"
+                Grid.Row="0"
+                Grid.RowSpan="3"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                HeightRequest="400"
+                HorizontalOptions="Center"
+                IsAnimationEnabled="False"
+                IsVisible="False"
+                RepeatCount="1"
+                Source="confetti.json"
+                VerticalOptions="Center"
+                WidthRequest="400" />
         </Grid>
         <Button
             Clicked="Reset_Clicked"
