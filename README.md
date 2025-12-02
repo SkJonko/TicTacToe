@@ -1,6 +1,6 @@
 # 🎮 Advanced Tic-Tac-Toe — MAUI Edition
 
-![Logo](assets/TicTacToe.png)
+![Logo](assets/TicTacToe (Small).png)
 
 
 An enhanced **Tic-Tac-Toe** game built with **.NET MAUI**, featuring animated interactions, accessibility support, AI opponent mode, and a unique gameplay twist:
