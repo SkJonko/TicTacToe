@@ -6,60 +6,65 @@ namespace TicToe.Infinite.Pages;
 
 public partial class MainPage : ContentPage
 {
-    private TicToeGameService _game = new();
-    private TicToeRepository _ticToeRepository = new(ServiceHelper.GetService<ILogger<TicToeRepository>>());
-    private bool _isRunning = false;
+	private TicToeGameService _game = new();
+	private TicToeRepository _ticToeRepository = new(ServiceHelper.GetService<ILogger<TicToeRepository>>());
+	private bool _isRunning = false;
 
-    public MainPage()
-    {
-        InitializeComponent();
+	public MainPage()
+	{
+		InitializeComponent();
 
-        _game.CellRemoved += pos => AnimateRemove(GetCell(pos.r, pos.c));
-        _game.CellWillBeRemoved += pos => AnimateBreathe(GetCell(pos.r, pos.c));
-    }
+		_game.CellRemoved += pos => AnimateRemove(GetCell(pos.r, pos.c));
+		_game.CellWillBeRemoved += pos => AnimateBreathe(GetCell(pos.r, pos.c));
+	}
 
-    private async void Cell_Tapped(object sender, TappedEventArgs e)
-    {
-		if (_isRunning)
+	private async void Cell_Tapped(object sender, TappedEventArgs e)
+	{
+		try
 		{
-			return;
+			if (_isRunning)
+			{
+				return;
+			}
+
+			_isRunning = true;
+
+			var border = (Border)sender;
+			int r = Grid.GetRow(border);
+			int c = Grid.GetColumn(border);
+
+			if (!_game.MakeMove(r, c))
+			{
+				return;
+			}
+
+			AnimatePlace((Label)border.Content, _game.Board[r, c]);
+
+			if (_game.Won)
+			{
+				await AnimateWinAsync(_game.CurrentPlayer);
+				return;
+			}
+
+			TurnLabel.Text = string.Format(AppResources.MainPage_PlayersTurn, _game.CurrentPlayer);
+
+			// AI logic
+			if (AISwitch.IsToggled && _game.CurrentPlayer == _game.AIPlayer)
+			{
+				await DoAIMoveAsync();
+			}
 		}
-
-		_isRunning = true;
-
-        var border = (Border)sender;
-        int r = Grid.GetRow(border);
-        int c = Grid.GetColumn(border);
-
-        if (!_game.MakeMove(r, c))
+		finally
 		{
-			return;
+			_isRunning = false;
 		}
+	}
 
-		AnimatePlace((Label)border.Content, _game.Board[r, c]);
+	private async Task DoAIMoveAsync()
+	{
+		await Task.Delay(400);
 
-        if (_game.Won)
-        {
-            await AnimateWinAsync(_game.CurrentPlayer);
-            return;
-        }
-
-        TurnLabel.Text = string.Format(AppResources.MainPage_PlayersTurn, _game.CurrentPlayer);
-
-        // AI logic
-        if (AISwitch.IsToggled && _game.CurrentPlayer == _game.AIPlayer)
-		{
-			await DoAIMoveAsync();
-		}
-
-		_isRunning = false;
-    }
-
-    private async Task DoAIMoveAsync()
-    {
-        await Task.Delay(400);
-
-        var move = _game.GetAIMove();
+		var move = _game.GetAIMove();
 
 		if (move is null)
 		{
@@ -67,63 +72,63 @@ public partial class MainPage : ContentPage
 		}
 
 		var (r, c) = move.Value;
-        _game.MakeMove(r, c);
+		_game.MakeMove(r, c);
 
-        var cell = GetCell(r, c);
-        AnimatePlace((Label)cell.Content, _game.Board[r, c]);
+		var cell = GetCell(r, c);
+		AnimatePlace((Label)cell.Content, _game.Board[r, c]);
 
-        if (_game.Won)
-        {
-            await AnimateWinAsync(_game.CurrentPlayer);
-            return;
-        }
+		if (_game.Won)
+		{
+			await AnimateWinAsync(_game.CurrentPlayer);
+			return;
+		}
 
-        TurnLabel.Text = string.Format(AppResources.MainPage_PlayersTurn, _game.CurrentPlayer);
-    }
+		TurnLabel.Text = string.Format(AppResources.MainPage_PlayersTurn, _game.CurrentPlayer);
+	}
 
-    private Border GetCell(int r, int c) =>
-        BoardGrid.Children.OfType<Border>().First(b => Grid.GetRow(b) == r && Grid.GetColumn(b) == c);
+	private Border GetCell(int r, int c) =>
+		BoardGrid.Children.OfType<Border>().First(b => Grid.GetRow(b) == r && Grid.GetColumn(b) == c);
 
-    private async void AnimatePlace(Label label, char symbol)
-    {
-        label.Text = symbol.ToString();
-        label.Opacity = 0;
-        label.Scale = 0.2;
+	private async void AnimatePlace(Label label, char symbol)
+	{
+		label.Text = symbol.ToString();
+		label.Opacity = 0;
+		label.Scale = 0.2;
 
-        await Task.WhenAll(
-            label.FadeToAsync(1, 180),
-            label.ScaleToAsync(1, 180, Easing.SpringOut)
-        );
-    }
+		await Task.WhenAll(
+			label.FadeToAsync(1, 180),
+			label.ScaleToAsync(1, 180, Easing.SpringOut)
+		);
+	}
 
-    private async void AnimateRemove(Border cell)
-    {
-        var label = (Label)cell.Content;
-        await label.FadeToAsync(0, 250);
-        label.Text = "";
-        label.Opacity = 1;
-    }
+	private async void AnimateRemove(Border cell)
+	{
+		var label = (Label)cell.Content;
+		await label.FadeToAsync(0, 250);
+		label.Text = "";
+		label.Opacity = 1;
+	}
 
-    private async void AnimateBreathe(Border cell)
-    {
-        var oldCell = cell;
+	private async void AnimateBreathe(Border cell)
+	{
+		var oldCell = cell;
 
-        while (oldCell == cell)
-        {
-            var label = (Label)cell.Content;
+		while (oldCell == cell)
+		{
+			var label = (Label)cell.Content;
 			if (string.IsNullOrEmpty(label.Text))
 			{
 				return;
 			}
 
 			await label.ScaleToAsync(1.2, 200, Easing.CubicInOut);
-            await Task.Delay(300);
-            await label.ScaleToAsync(1.0, 200, Easing.CubicInOut);
-        }
-    }
+			await Task.Delay(300);
+			await label.ScaleToAsync(1.0, 200, Easing.CubicInOut);
+		}
+	}
 
-    private async Task AnimateWinAsync(char winner)
-    {
+	private async Task AnimateWinAsync(char winner)
+	{
 		var tasks = new List<Task>()
 		{
 			ConfettiAsync(),
@@ -136,7 +141,7 @@ public partial class MainPage : ContentPage
 		};
 
 		await Task.WhenAll(tasks);
-    }
+	}
 
 	private async Task AnimateLabel(char winner)
 	{
@@ -161,7 +166,7 @@ public partial class MainPage : ContentPage
 		Confetti.IsAnimationEnabled = false;
 	}
 
-    private void Reset_Clicked(object sender, EventArgs e)
+	private void Reset_Clicked(object sender, EventArgs e)
 	{
 		_game.Reset();
 

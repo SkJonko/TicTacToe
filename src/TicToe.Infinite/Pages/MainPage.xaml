@@ -175,7 +175,8 @@
                 HorizontalOptions="Center"
                 IsAnimationEnabled="False"
                 IsVisible="False"
-                RepeatCount="1"
+                RepeatCount="1000"
+                RepeatMode="Restart"
                 Source="confetti.json"
                 VerticalOptions="Center"
                 WidthRequest="400" />
