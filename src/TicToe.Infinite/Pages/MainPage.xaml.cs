@@ -22,6 +22,11 @@ public partial class MainPage : ContentPage
 	{
 		try
 		{
+			if (true)
+			{
+				return;
+			}
+
 			if (_isRunning)
 			{
 				return;
