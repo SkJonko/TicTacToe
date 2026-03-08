@@ -1,0 +1,106 @@
+# Maestro Test: Diagonal Win Condition
+# This test validates that a player wins when placing three consecutive marks
+# in a diagonal line (both main diagonal and anti-diagonal).
+
+appId: com.companyname.tictoe.infinite
+---
+
+# Test 1: Main diagonal win (top-left to bottom-right)
+# Setup: Launch app
+- launchApp
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Move 1: X places mark at (0,0) - Top-left (main diagonal)
+- tapOn:
+    id: "MainPage_Border_FirstFirst"
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+# Move 2: O places mark at (0,1) - Top-center
+- tapOn:
+    id: "MainPage_Border_SecondFirst"
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Move 3: X places mark at (1,1) - Middle-center (main diagonal)
+- tapOn:
+    id: "MainPage_Border_SecondSecond"
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+# Move 4: O places mark at (1,0) - Middle-left
+- tapOn:
+    id: "MainPage_Border_FirstSecond"
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Move 5: X places mark at (2,2) - Bottom-right (main diagonal)
+# This completes diagonal line: (0,0), (1,1), (2,2)
+# Game should end with X winning
+- tapOn:
+    id: "MainPage_Border_ThirdThird"
+
+
+# Verify game ended with X as winner
+- assertVisible:
+    text: "X"
+
+- assertVisible:
+    text: "Player X Wins!"
+
+# Reset for second test
+- tapOn:
+    id: "MainPage_Button_ResetButton"
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Test 2: Anti-diagonal win (top-right to bottom-left)
+# Move 1: X places mark at (0,2) - Top-right (anti-diagonal)
+- tapOn:
+    id: "MainPage_Border_ThirdFirst"
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+# Move 2: O places mark at (0,0) - Top-left
+- tapOn:
+    id: "MainPage_Border_FirstFirst"
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Move 3: X places mark at (1,1) - Middle-center (anti-diagonal)
+- tapOn:
+    id: "MainPage_Border_SecondSecond"
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+# Move 4: O places mark at (1,0) - Middle-left
+- tapOn:
+    id: "MainPage_Border_FirstSecond"
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Move 5: X places mark at (2,0) - Bottom-left (anti-diagonal)
+# This completes anti-diagonal line: (0,2), (1,1), (2,0)
+# Game should end with X winning
+- tapOn:
+    id: "MainPage_Border_FirstThird"
+
+
+# Verify game ended with X as winner
+- assertVisible:
+    text: "X"
+
+- assertVisible:
+    text: "Player X Wins!"
+

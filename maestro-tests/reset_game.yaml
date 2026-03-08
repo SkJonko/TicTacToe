@@ -1,0 +1,65 @@
+# Maestro Test: Reset Functionality
+# This test validates that the reset button clears the board
+# and starts a new game correctly.
+
+appId: com.companyname.tictoe.infinite
+---
+
+# Setup: Launch app
+- launchApp
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Place some marks on the board
+- tapOn:
+    id: "MainPage_Border_FirstFirst"
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+- tapOn:
+    id: "MainPage_Border_SecondFirst"
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+- tapOn:
+    id: "MainPage_Border_ThirdFirst"
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+- tapOn:
+    id: "MainPage_Border_FirstSecond"
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Now reset the game
+- tapOn:
+    id: "MainPage_Button_ResetButton"
+
+# Verify board is cleared and game reset
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Verify we can place marks again in the reset board
+- tapOn:
+    id: "MainPage_Border_SecondSecond"
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+- tapOn:
+    id: "MainPage_Border_ThirdThird"
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Verify new game is playable
+- tapOn:
+    id: "MainPage_Border_FirstFirst"
+
+- assertVisible:
+    text: "Player O's Turn!"

@@ -1,0 +1,73 @@
+# Maestro Test: Reset After Win
+# This test validates that the reset button works correctly
+# after a player has won the game.
+
+appId: com.companyname.tictoe.infinite
+---
+
+# Setup: Launch app
+- launchApp
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Create a winning scenario for X
+# Move 1: X at (0,0)
+- tapOn:
+    id: "MainPage_Border_FirstFirst"
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+# Move 2: O at (1,0)
+- tapOn:
+    id: "MainPage_Border_FirstSecond"
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Move 3: X at (0,1)
+- tapOn:
+    id: "MainPage_Border_SecondFirst"
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+# Move 4: O at (1,1)
+- tapOn:
+    id: "MainPage_Border_SecondSecond"
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Move 5: X at (0,2) - X wins
+- tapOn:
+    id: "MainPage_Border_ThirdFirst"
+
+# Verify game ended with X as winner
+- assertVisible:
+    text: "X"
+
+- assertVisible:
+    text: "Player X Wins!"
+
+# Reset for second test
+- tapOn:
+    id: "MainPage_Button_ResetButton"
+
+# Verify game is reset
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Verify win message is gone
+- assertNotVisible:
+    text: "Player X Wins!"
+
+# Verify new game is playable
+- tapOn:
+    id: "MainPage_Border_SecondSecond"
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+

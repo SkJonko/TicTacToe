@@ -1,0 +1,39 @@
+# Maestro Test: AI Mode - Basic AI Opponent Gameplay
+# This test validates that the AI toggle works and the game plays with AI opponent.
+
+appId: com.companyname.tictoe.infinite
+---
+
+# Setup: Launch app
+- launchApp
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+- assertVisible:
+    text: "Enable AI (O)"
+
+# Enable AI mode
+- tapOn:
+    id: "MainPage_Switch_AI"
+
+# Player X makes first move
+- tapOn:
+    id: "MainPage_Border_FirstFirst"
+
+# AI (as O) should have made a move
+# Verify turn is back to X
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Disable AI mode
+- tapOn:
+    id: "MainPage_Switch_AI"
+
+# Player X makes first move
+- tapOn:
+    id: "MainPage_Border_SecondSecond"
+
+# Verify turn is back to O (human opponent) and AI is disabled.
+- assertVisible:
+    text: "Player O's Turn!"

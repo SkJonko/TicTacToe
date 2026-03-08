@@ -1,0 +1,56 @@
+# Maestro Test: Application Launch
+# This test verifies that the application launches successfully
+# and the main game screen is visible with the board ready to play.
+
+appId: com.companyname.tictoe.infinite
+---
+
+# Test 1: App launches and game screen is visible
+- launchApp
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+- assertVisible:
+    text: "Reset Game"
+
+- assertVisible:
+    text: "Enable AI (O)"
+
+
+# Test 2: Board grid is rendered with 9 empty cells
+- assertVisible:
+    id: "MainPage_Border_FirstFirst"
+
+- assertVisible:
+    id: "MainPage_Border_SecondFirst"
+
+- assertVisible:
+    id: "MainPage_Border_ThirdFirst"
+
+- assertVisible:
+    id: "MainPage_Border_FirstSecond"
+
+- assertVisible:
+    id: "MainPage_Border_SecondSecond"
+
+- assertVisible:
+    id: "MainPage_Border_ThirdSecond"
+
+- assertVisible:
+    id: "MainPage_Border_FirstThird"
+
+- assertVisible:
+    id: "MainPage_Border_SecondThird"
+
+- assertVisible:
+    id: "MainPage_Border_ThirdThird"
+
+# Verify initial game state
+- assertNotVisible:
+    text: "You won"
+
+- assertNotVisible:
+    text: "Game Over"
+
+

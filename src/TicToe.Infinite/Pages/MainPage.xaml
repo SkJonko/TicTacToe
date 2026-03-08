@@ -31,7 +31,11 @@
     </ContentPage.Resources>
 
     <VerticalStackLayout Padding="20" Spacing="25">
-        <Label x:Name="TurnLabel" HorizontalOptions="Center" Style="{StaticResource LargeTitle}">
+        <Label
+            x:Name="TurnLabel"
+            AutomationId="MainPage_Label_TurnLabel"
+            HorizontalOptions="Center"
+            Style="{StaticResource LargeTitle}">
             <Label.Text>
                 <MultiBinding Converter="{StaticResource StringFormatConverter}">
                     <Binding Source="{x:Static strings:AppResources.MainPage_PlayersTurn}" />
@@ -48,7 +52,11 @@
             VerticalOptions="Center"
             WidthRequest="350">
             <!--  9 cells  -->
-            <Border Grid.Row="0" Grid.Column="0" StyleClass="Cell">
+            <Border
+                Grid.Row="0"
+                Grid.Column="0"
+                AutomationId="MainPage_Border_FirstFirst"
+                StyleClass="Cell">
                 <SemanticProperties.Description>
                     <MultiBinding Converter="{StaticResource StringFormatConverter}">
                         <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
@@ -61,7 +69,11 @@
                 </Border.GestureRecognizers>
                 <Label StyleClass="SymbolText" />
             </Border>
-            <Border Grid.Row="0" Grid.Column="1" StyleClass="Cell">
+            <Border
+                Grid.Row="0"
+                Grid.Column="1"
+                AutomationId="MainPage_Border_SecondFirst"
+                StyleClass="Cell">
                 <SemanticProperties.Description>
                     <MultiBinding Converter="{StaticResource StringFormatConverter}">
                         <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
@@ -74,7 +86,11 @@
                 </Border.GestureRecognizers>
                 <Label StyleClass="SymbolText" />
             </Border>
-            <Border Grid.Row="0" Grid.Column="2" StyleClass="Cell">
+            <Border
+                Grid.Row="0"
+                Grid.Column="2"
+                AutomationId="MainPage_Border_ThirdFirst"
+                StyleClass="Cell">
                 <SemanticProperties.Description>
                     <MultiBinding Converter="{StaticResource StringFormatConverter}">
                         <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
@@ -87,7 +103,11 @@
                 </Border.GestureRecognizers>
                 <Label StyleClass="SymbolText" />
             </Border>
-            <Border Grid.Row="1" Grid.Column="0" StyleClass="Cell">
+            <Border
+                Grid.Row="1"
+                Grid.Column="0"
+                AutomationId="MainPage_Border_FirstSecond"
+                StyleClass="Cell">
                 <SemanticProperties.Description>
                     <MultiBinding Converter="{StaticResource StringFormatConverter}">
                         <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
@@ -100,7 +120,11 @@
                 </Border.GestureRecognizers>
                 <Label StyleClass="SymbolText" />
             </Border>
-            <Border Grid.Row="1" Grid.Column="1" StyleClass="Cell">
+            <Border
+                Grid.Row="1"
+                Grid.Column="1"
+                AutomationId="MainPage_Border_SecondSecond"
+                StyleClass="Cell">
                 <SemanticProperties.Description>
                     <MultiBinding Converter="{StaticResource StringFormatConverter}">
                         <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
@@ -113,7 +137,11 @@
                 </Border.GestureRecognizers>
                 <Label StyleClass="SymbolText" />
             </Border>
-            <Border Grid.Row="1" Grid.Column="2" StyleClass="Cell">
+            <Border
+                Grid.Row="1"
+                Grid.Column="2"
+                AutomationId="MainPage_Border_ThirdSecond"
+                StyleClass="Cell">
                 <SemanticProperties.Description>
                     <MultiBinding Converter="{StaticResource StringFormatConverter}">
                         <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
@@ -126,7 +154,11 @@
                 </Border.GestureRecognizers>
                 <Label StyleClass="SymbolText" />
             </Border>
-            <Border Grid.Row="2" Grid.Column="0" StyleClass="Cell">
+            <Border
+                Grid.Row="2"
+                Grid.Column="0"
+                AutomationId="MainPage_Border_FirstThird"
+                StyleClass="Cell">
                 <SemanticProperties.Description>
                     <MultiBinding Converter="{StaticResource StringFormatConverter}">
                         <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
@@ -139,7 +171,11 @@
                 </Border.GestureRecognizers>
                 <Label StyleClass="SymbolText" />
             </Border>
-            <Border Grid.Row="2" Grid.Column="1" StyleClass="Cell">
+            <Border
+                Grid.Row="2"
+                Grid.Column="1"
+                AutomationId="MainPage_Border_SecondThird"
+                StyleClass="Cell">
                 <SemanticProperties.Description>
                     <MultiBinding Converter="{StaticResource StringFormatConverter}">
                         <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
@@ -152,7 +188,11 @@
                 </Border.GestureRecognizers>
                 <Label StyleClass="SymbolText" />
             </Border>
-            <Border Grid.Row="2" Grid.Column="2" StyleClass="Cell">
+            <Border
+                Grid.Row="2"
+                Grid.Column="2"
+                AutomationId="MainPage_Border_ThirdThird"
+                StyleClass="Cell">
                 <SemanticProperties.Description>
                     <MultiBinding Converter="{StaticResource StringFormatConverter}">
                         <Binding Source="{x:Static strings:SemanticDescriptions.MainPage_BoxInformation}" />
@@ -182,12 +222,13 @@
                 WidthRequest="400" />
         </Grid>
         <Button
+            AutomationId="MainPage_Button_ResetButton"
             Clicked="Reset_Clicked"
             HeightRequest="50"
             SemanticProperties.Description="{x:Static strings:SemanticDescriptions.MainPage_ResetButton}"
             Text="{x:Static strings:AppResources.MainPage_ResetGame}" />
         <HorizontalStackLayout Spacing="10">
-            <Switch x:Name="AISwitch" SemanticProperties.Description="{x:Static strings:SemanticDescriptions.MainPage_AISwitch}" />
+            <Switch x:Name="AISwitch" AutomationId="MainPage_Switch_AI" SemanticProperties.Description="{x:Static strings:SemanticDescriptions.MainPage_AISwitch}" />
             <Label Style="{StaticResource Body1}" Text="{x:Static strings:AppResources.MainPage_EnableAI}" VerticalOptions="Center" />
         </HorizontalStackLayout>
     </VerticalStackLayout>

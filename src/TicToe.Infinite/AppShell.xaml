@@ -7,16 +7,19 @@
     xmlns:sf="clr-namespace:Syncfusion.Maui.Toolkit.SegmentedControl;assembly=Syncfusion.Maui.Toolkit"
     xmlns:strings="clr-namespace:TicToe.Infinite.Resources.Strings"
     Title="{x:Static strings:AppResources.AppTitle}"
+    AutomationId="AppShell_Root"
     Shell.FlyoutBehavior="Flyout">
 
     <ShellContent
         Title="{x:Static strings:AppResources.AppShell_Game}"
+        AutomationId="AppShell_Game"
         ContentTemplate="{DataTemplate pages:MainPage}"
         Icon="{StaticResource IconGame}"
         Route="main" />
 
     <ShellContent
         Title="{x:Static strings:AppResources.AppShell_Dashboard}"
+        AutomationId="AppShell_Dashboard"
         ContentTemplate="{DataTemplate pages:DashboardPage}"
         Icon="{StaticResource IconDashboard}"
         Route="dashboard" />
@@ -32,8 +35,8 @@
                 VerticalOptions="Center">
                 <sf:SfSegmentedControl.ItemsSource>
                     <x:Array Type="{x:Type sf:SfSegmentItem}">
-                        <sf:SfSegmentItem ImageSource="{StaticResource IconLight}" SemanticProperties.Description="{x:Static strings:SemanticDescriptions.AppShell_LightMode}" />
-                        <sf:SfSegmentItem ImageSource="{StaticResource IconDark}" SemanticProperties.Description="{x:Static strings:SemanticDescriptions.AppShell_DarkMode}" />
+                        <sf:SfSegmentItem AutomationId="AppShell_IconLight" ImageSource="{StaticResource IconLight}" SemanticProperties.Description="{x:Static strings:SemanticDescriptions.AppShell_LightMode}" />
+                        <sf:SfSegmentItem AutomationId="AppShell_IconDark" ImageSource="{StaticResource IconDark}" SemanticProperties.Description="{x:Static strings:SemanticDescriptions.AppShell_DarkMode}" />
                     </x:Array>
                 </sf:SfSegmentedControl.ItemsSource>
             </sf:SfSegmentedControl>
