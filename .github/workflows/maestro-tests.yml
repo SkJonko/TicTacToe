@@ -71,15 +71,15 @@ jobs:
           
           # Install required SDK components (these are essential for the emulator)
           sudo ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager \
-            "platforms;android-34" \
-            "system-images;android-34;google_apis;x86_64" \
+            "platforms;android-33" \
+            "system-images;android-33;google_apis;x86_64" \
             "platform-tools" \
             "emulator" \
             --no_https --verbose 2>&1 | tail -5
         env:
           ANDROID_HOME: /usr/local/lib/android/sdk
         # Installing:
-        # - platforms;android-34: Required for building APK
+        # - platforms;android-33: Required for building APK (Android 13 - more stable than 34)
         # - system-images for emulator: Google APIs image chosen for better compatibility
         # - platform-tools: adb, fastboot, etc.
 
@@ -96,35 +96,61 @@ jobs:
         # The "yes" command automatically accepts all licenses
 
       # ========================================================================
+      # STEP 6: Verify system image availability
+      # ========================================================================
+      - name: Verify system image availability
+        run: |
+          # Check if the required system image is installed
+          if ! ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager --list_installed | grep -q "system-images;android-33;google_apis;x86_64"; then
+            echo "ERROR: Required system image not installed!"
+            echo "Available system images:"
+            ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager --list | grep "system-images" | head -10
+            exit 1
+          fi
+          echo "System image verified successfully"
+        env:
+          ANDROID_HOME: /usr/local/lib/android/sdk
+        # Ensures the system image was installed correctly before attempting AVD creation
+
+      # ========================================================================
       # STEP 7: Create Android Virtual Device (AVD)
       # ========================================================================
       - name: Create Android Virtual Device
         run: |
           # remove existing AVD if present (sometimes leftover from cache)
-          ${ANDROID_HOME}/cmdline-tools/latest/bin/avdmanager delete avd -n "Pixel_API_34" || true
+          ${ANDROID_HOME}/cmdline-tools/latest/bin/avdmanager delete avd -n "Pixel_API_33" || true
           
           # Create AVD with optimized settings for CI environment
           echo "no" | ${ANDROID_HOME}/cmdline-tools/latest/bin/avdmanager create avd \
-            -n "Pixel_API_34" \
-            -k "system-images;android-34;google_apis;x86_64" \
+            -n "Pixel_API_33" \
+            -k "system-images;android-33;google_apis;x86_64" \
             -d "Nexus 5X" \
             -f
+          
+          # Verify AVD was created successfully
+          if ! ${ANDROID_HOME}/cmdline-tools/latest/bin/avdmanager list avd | grep -q "Pixel_API_33"; then
+            echo "ERROR: AVD creation failed!"
+            ${ANDROID_HOME}/cmdline-tools/latest/bin/avdmanager list avd
+            exit 1
+          fi
+          
+          echo "AVD created successfully"
         env:
           ANDROID_HOME: /usr/local/lib/android/sdk
-        # Creates an emulator named "Pixel_API_34" with:
-        # - Android 14 (API 34) - modern API level for testing
+        # Creates an emulator named "Pixel_API_33" with:
+        # - Android 13 (API 33) - stable API level for testing
         # - Google APIs - includes Play Services (useful for many apps)
         # - x86_64 architecture - fastest emulation on CI runners
         # - Nexus 5X device profile - standard portrait device
 
       # ========================================================================
-      # STEP 8: Start Android Emulator
+      # STEP 9: Start Android Emulator
       # ========================================================================
       - name: Start Android Emulator
         run: |
           # Start emulator with performance optimizations for CI
           ${ANDROID_HOME}/emulator/emulator \
-            -avd Pixel_API_34 \
+            -avd Pixel_API_33 \
             -no-snapshot-load \
             -no-window \
             -no-audio \
@@ -153,7 +179,7 @@ jobs:
         # 300s timeout: Emulator usually boots in 60-120s, 300s is safe margin
 
       # ========================================================================
-      # STEP 9: Build MAUI Android APK
+      # STEP 10: Build MAUI Android APK
       # ========================================================================
       - name: Build MAUI Android APK
         run: |
@@ -170,7 +196,7 @@ jobs:
         timeout-minutes: 15
 
       # ========================================================================
-      # STEP 10: Find and install APK on emulator
+      # STEP 11: Find and install APK on emulator
       # ========================================================================
       - name: Install APK on emulator
         run: |
@@ -194,7 +220,7 @@ jobs:
         # Failure to install aborts the workflow (prevents invalid test runs)
 
       # ========================================================================
-      # STEP 11: Install Maestro CLI
+      # STEP 12: Install Maestro CLI
       # ========================================================================
       - name: Install Maestro CLI
         run: |
@@ -212,7 +238,7 @@ jobs:
         # The script adds maestro to ~/.maestro/bin and updates PATH
 
       # ========================================================================
-      # STEP 12: Wait for app to settle
+      # STEP 13: Wait for app to settle
       # ========================================================================
       - name: Wait for app and emulator to settle
         run: |
@@ -227,7 +253,7 @@ jobs:
         # are still initializing during first Maestro command
 
       # ========================================================================
-      # STEP 13: Run Maestro Tests (Individual execution for better reporting)
+      # STEP 14: Run Maestro Tests (Individual execution for better reporting)
       # ========================================================================
       - name: Run Maestro Tests
         run: |
@@ -288,7 +314,7 @@ jobs:
         timeout-minutes: 30
 
       # ========================================================================
-      # STEP 14: Capture Emulator Logs on Failure
+      # STEP 15: Capture Emulator Logs on Failure
       # ========================================================================
       - name: Capture emulator logs on failure
         if: failure()
@@ -314,7 +340,7 @@ jobs:
         # Added timeouts to prevent hanging on unresponsive emulator
 
       # ========================================================================
-      # STEP 15: Upload failure artifacts
+      # STEP 16: Upload failure artifacts
       # ========================================================================
       - name: Upload failure artifacts
         if: failure()
