@@ -28,11 +28,15 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: 'gradle'
         # Java is required for:
         # - Android SDK build tools
         # - Android emulator
         # - Gradle build system used by MAUI
+        # NOTE: we intentionally omit the `cache: 'gradle'` setting because
+        # this repository does not contain any Gradle files. The default
+        # behaviour causes an error when no files are found, so caching is
+        # disabled here.  The Android SDK caching earlier in the workflow
+        # already provides the main performance benefit.
 
       # ========================================================================
       # STEP 3: Setup .NET (required for MAUI project)
