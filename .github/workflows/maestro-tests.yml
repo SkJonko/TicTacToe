@@ -74,6 +74,7 @@ jobs:
             "platforms;android-34" \
             "system-images;android-34;google_apis;x86_64" \
             "platform-tools" \
+            "emulator" \
             --no_https --verbose 2>&1 | tail -5
         env:
           ANDROID_HOME: /usr/local/lib/android/sdk
@@ -87,6 +88,9 @@ jobs:
       # ========================================================================
       - name: Create Android Virtual Device
         run: |
+          # remove existing AVD if present (sometimes leftover from cache)
+          ${ANDROID_HOME}/cmdline-tools/latest/bin/avdmanager delete avd -n "Pixel_API_34" || true
+          
           # Create AVD with optimized settings for CI environment
           echo "no" | ${ANDROID_HOME}/cmdline-tools/latest/bin/avdmanager create avd \
             -n "Pixel_API_34" \
@@ -278,18 +282,24 @@ jobs:
         if: failure()
         run: |
           echo "=== Emulator System Log ===" >> maestro-failure-report.txt
-          ${ANDROID_HOME}/platform-tools/adb logcat -d >> maestro-failure-report.txt 2>&1 || true
+          timeout 10s ${ANDROID_HOME}/platform-tools/adb logcat -d >> maestro-failure-report.txt 2>&1 || echo "ADB logcat timed out or failed" >> maestro-failure-report.txt
           
           echo "" >> maestro-failure-report.txt
           echo "=== Emulator Processes ===" >> maestro-failure-report.txt
-          ${ANDROID_HOME}/platform-tools/adb shell ps >> maestro-failure-report.txt 2>&1 || true
+          timeout 5s ${ANDROID_HOME}/platform-tools/adb shell ps >> maestro-failure-report.txt 2>&1 || echo "ADB shell ps timed out or failed" >> maestro-failure-report.txt
           
           echo "" >> maestro-failure-report.txt
           echo "=== Installed Packages ===" >> maestro-failure-report.txt
-          ${ANDROID_HOME}/platform-tools/adb shell pm list packages | grep -i tictoe >> maestro-failure-report.txt 2>&1 || true
+          timeout 5s ${ANDROID_HOME}/platform-tools/adb shell pm list packages | grep -i tictoe >> maestro-failure-report.txt 2>&1 || echo "ADB pm list timed out or failed" >> maestro-failure-report.txt
+          
+          echo "" >> maestro-failure-report.txt
+          echo "=== Emulator Status ===" >> maestro-failure-report.txt
+          ${ANDROID_HOME}/platform-tools/adb devices >> maestro-failure-report.txt 2>&1 || echo "ADB devices check failed" >> maestro-failure-report.txt
         env:
           ANDROID_HOME: /usr/local/lib/android/sdk
+        timeout-minutes: 1
         # Runs only on failure, collects diagnostic info for troubleshooting
+        # Added timeouts to prevent hanging on unresponsive emulator
 
       # ========================================================================
       # STEP 14: Upload failure artifacts
