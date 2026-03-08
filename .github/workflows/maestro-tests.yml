@@ -94,16 +94,43 @@ jobs:
                 "system-images;android-33;google_apis;x86_64" \
                 --no_https --verbose 2>&1 | tail -5; then
               echo "System image installed successfully on attempt $i"
-              break
+              
+              # Refresh package list to ensure newly installed packages are recognized
+              echo "Refreshing SDK package list..."
+              ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager --update --no_https --verbose 2>&1 | tail -1
+              
+              # Verify installation by checking both SDK manager and filesystem
+              echo "Verifying system image installation..."
+              if ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager --list_installed | grep -q "system-images;android-33;google_apis;x86_64"; then
+                echo "✅ System image verified via SDK manager"
+                break
+              elif [ -d "${ANDROID_HOME}/system-images/android-33/google_apis/x86_64" ]; then
+                echo "✅ System image verified via filesystem"
+                break
+              else
+                echo "❌ Verification failed, retrying..."
+              fi
             else
               echo "Attempt $i failed, waiting 10 seconds before retry..."
               sleep 10
             fi
           done
+          
+          # Final verification
+          if ! (${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager --list_installed | grep -q "system-images;android-33;google_apis;x86_64" || [ -d "${ANDROID_HOME}/system-images/android-33/google_apis/x86_64" ]); then
+            echo "ERROR: System image installation failed after all retries!"
+            echo "Available system images:"
+            ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager --list | grep "system-images" | head -10
+            echo "System images directory contents:"
+            ls -la ${ANDROID_HOME}/system-images/ 2>/dev/null || echo "System images directory not found"
+            exit 1
+          fi
+          
+          echo "System image installation and verification completed successfully"
         env:
           ANDROID_HOME: /usr/local/lib/android/sdk
         # System image downloads can fail due to network issues
-        # Retry up to 3 times with delays to improve reliability
+        # Retry up to 3 times with delays and verify installation both via SDK manager and filesystem
 
       # ========================================================================
       # STEP 6: Accept Android SDK licenses
@@ -118,25 +145,7 @@ jobs:
         # The "yes" command automatically accepts all licenses
 
       # ========================================================================
-      # STEP 7: Verify system image availability
-      # ========================================================================
-      - name: Verify system image availability
-        run: |
-          # Check if the required system image is installed
-          if ! ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager --list_installed | grep -q "system-images;android-33;google_apis;x86_64"; then
-            echo "ERROR: Required system image not installed!"
-            echo "Available system images:"
-            ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager --list | grep "system-images" | head -10
-            exit 1
-          fi
-          echo "System image verified successfully"
-        env:
-          ANDROID_HOME: /usr/local/lib/android/sdk
-        # Ensures the system image was installed correctly before attempting AVD creation
-
-
-      # ========================================================================
-      # STEP 8: Create Android Virtual Device (AVD)
+      # STEP 7: Create Android Virtual Device (AVD)
       # ========================================================================
       - name: Create Android Virtual Device
         run: |
@@ -167,7 +176,7 @@ jobs:
         # - Nexus 5X device profile - standard portrait device
 
       # ========================================================================
-      # STEP 9: Start Android Emulator
+      # STEP 8: Start Android Emulator
       # ========================================================================
       - name: Start Android Emulator
         run: |
@@ -202,7 +211,7 @@ jobs:
         # 300s timeout: Emulator usually boots in 60-120s, 300s is safe margin
 
       # ========================================================================
-      # STEP 10: Build MAUI Android APK
+      # STEP 9: Build MAUI Android APK
       # ========================================================================
       - name: Build MAUI Android APK
         run: |
@@ -219,7 +228,7 @@ jobs:
         timeout-minutes: 15
 
       # ========================================================================
-      # STEP 11: Find and install APK on emulator
+      # STEP 10: Find and install APK on emulator
       # ========================================================================
       - name: Install APK on emulator
         run: |
@@ -243,7 +252,7 @@ jobs:
         # Failure to install aborts the workflow (prevents invalid test runs)
 
       # ========================================================================
-      # STEP 12: Install Maestro CLI
+      # STEP 11: Install Maestro CLI
       # ========================================================================
       - name: Install Maestro CLI
         run: |
@@ -261,7 +270,7 @@ jobs:
         # The script adds maestro to ~/.maestro/bin and updates PATH
 
       # ========================================================================
-      # STEP 13: Wait for app to settle
+      # STEP 12: Wait for app to settle
       # ========================================================================
       - name: Wait for app and emulator to settle
         run: |
@@ -276,7 +285,7 @@ jobs:
         # are still initializing during first Maestro command
 
       # ========================================================================
-      # STEP 14: Run Maestro Tests (Individual execution for better reporting)
+      # STEP 13: Run Maestro Tests (Individual execution for better reporting)
       # ========================================================================
       - name: Run Maestro Tests
         run: |
@@ -337,7 +346,7 @@ jobs:
         timeout-minutes: 30
 
       # ========================================================================
-      # STEP 15: Capture Emulator Logs on Failure
+      # STEP 14: Capture Emulator Logs on Failure
       # ========================================================================
       - name: Capture emulator logs on failure
         if: failure()
@@ -363,7 +372,7 @@ jobs:
         # Added timeouts to prevent hanging on unresponsive emulator
 
       # ========================================================================
-      # STEP 16: Upload failure artifacts
+      # STEP 15: Upload failure artifacts
       # ========================================================================
       - name: Upload failure artifacts
         if: failure()
