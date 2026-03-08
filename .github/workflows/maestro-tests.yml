@@ -84,7 +84,19 @@ jobs:
         # - platform-tools: adb, fastboot, etc.
 
       # ========================================================================
-      # STEP 6: Create Android Virtual Device (AVD)
+      # STEP 5.5: Accept Android SDK licenses
+      # ========================================================================
+      - name: Accept Android SDK licenses
+        run: |
+          # Accept all Android SDK licenses (required for AVD creation)
+          yes | ${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager --licenses
+        env:
+          ANDROID_HOME: /usr/local/lib/android/sdk
+        # Android SDK requires license acceptance before creating AVDs
+        # The "yes" command automatically accepts all licenses
+
+      # ========================================================================
+      # STEP 7: Create Android Virtual Device (AVD)
       # ========================================================================
       - name: Create Android Virtual Device
         run: |
@@ -106,7 +118,7 @@ jobs:
         # - Nexus 5X device profile - standard portrait device
 
       # ========================================================================
-      # STEP 7: Start Android Emulator
+      # STEP 8: Start Android Emulator
       # ========================================================================
       - name: Start Android Emulator
         run: |
@@ -141,7 +153,7 @@ jobs:
         # 300s timeout: Emulator usually boots in 60-120s, 300s is safe margin
 
       # ========================================================================
-      # STEP 8: Build MAUI Android APK
+      # STEP 9: Build MAUI Android APK
       # ========================================================================
       - name: Build MAUI Android APK
         run: |
@@ -158,7 +170,7 @@ jobs:
         timeout-minutes: 15
 
       # ========================================================================
-      # STEP 9: Find and install APK on emulator
+      # STEP 10: Find and install APK on emulator
       # ========================================================================
       - name: Install APK on emulator
         run: |
@@ -182,7 +194,7 @@ jobs:
         # Failure to install aborts the workflow (prevents invalid test runs)
 
       # ========================================================================
-      # STEP 10: Install Maestro CLI
+      # STEP 11: Install Maestro CLI
       # ========================================================================
       - name: Install Maestro CLI
         run: |
@@ -200,7 +212,7 @@ jobs:
         # The script adds maestro to ~/.maestro/bin and updates PATH
 
       # ========================================================================
-      # STEP 11: Wait for app to settle
+      # STEP 12: Wait for app to settle
       # ========================================================================
       - name: Wait for app and emulator to settle
         run: |
@@ -215,7 +227,7 @@ jobs:
         # are still initializing during first Maestro command
 
       # ========================================================================
-      # STEP 12: Run Maestro Tests (Individual execution for better reporting)
+      # STEP 13: Run Maestro Tests (Individual execution for better reporting)
       # ========================================================================
       - name: Run Maestro Tests
         run: |
@@ -276,7 +288,7 @@ jobs:
         timeout-minutes: 30
 
       # ========================================================================
-      # STEP 13: Capture Emulator Logs on Failure
+      # STEP 14: Capture Emulator Logs on Failure
       # ========================================================================
       - name: Capture emulator logs on failure
         if: failure()
@@ -302,7 +314,7 @@ jobs:
         # Added timeouts to prevent hanging on unresponsive emulator
 
       # ========================================================================
-      # STEP 14: Upload failure artifacts
+      # STEP 15: Upload failure artifacts
       # ========================================================================
       - name: Upload failure artifacts
         if: failure()
