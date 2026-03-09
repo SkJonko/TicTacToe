@@ -31,14 +31,13 @@ jobs:
 
     # Install MAUI workload
     - name: Install MAUI workload
-      run: |
-        dotnet workload restore
+      working-directory: src/TicToe.Infinite
+      run: dotnet workload restore
 
     # Build MAUI APK
     - name: Build MAUI Android APK
+      working-directory: src/TicToe.Infinite
       run: |
-        cd src/TicToe.Infinite
-
         dotnet publish \
           -f net10.0-android \
           -c Release \
