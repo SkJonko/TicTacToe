@@ -13,33 +13,38 @@ jobs:
 
     env:
       ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
+      ANDROID_SDK_HOME: /home/runner/.android
+      ANDROID_AVD_HOME: /home/runner/.android/avd
 
     steps:
 
     - name: Checkout
       uses: actions/checkout@v4
 
-    # Java required for Android
     - name: Setup Java
       uses: actions/setup-java@v4
       with:
         distribution: temurin
         java-version: 17
 
-    # .NET SDK
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: 10.0.x
+        dotnet-version: 8.0.x
 
     # Add Android tools to PATH
-    - name: Add Android SDK to PATH
+    - name: Configure Android PATH
       run: |
         echo "$ANDROID_SDK_ROOT/platform-tools" >> $GITHUB_PATH
         echo "$ANDROID_SDK_ROOT/emulator" >> $GITHUB_PATH
         echo "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin" >> $GITHUB_PATH
 
-    # Install required Android packages
+    # Prepare android directories
+    - name: Prepare Android directories
+      run: |
+        mkdir -p $ANDROID_SDK_HOME
+        mkdir -p $ANDROID_AVD_HOME
+
     - name: Install Android SDK packages
       run: |
         sdkmanager --install \
@@ -51,31 +56,43 @@ jobs:
     - name: Accept Android licenses
       run: yes | sdkmanager --licenses
 
-    # Create emulator
     - name: Create Android Emulator
       run: |
         echo "no" | avdmanager create avd \
           -n Pixel_API_33 \
           -k "system-images;android-33;google_apis;x86_64" \
-          -d pixel
+          -d pixel \
+          --force
 
-    # Start emulator
+        echo "Available AVDs:"
+        emulator -list-avds
+
     - name: Start Android Emulator
       run: |
-        emulator -avd Pixel_API_33 -no-window -no-audio -no-snapshot &
+        adb kill-server || true
+
+        emulator -avd Pixel_API_33 \
+          -no-window \
+          -no-audio \
+          -no-snapshot \
+          -gpu swiftshader_indirect \
+          -no-boot-anim \
+          &
 
         adb wait-for-device
+
+        echo "Waiting for emulator boot..."
 
         boot_completed=""
         until [[ "$boot_completed" == "1" ]]; do
           sleep 5
           boot_completed=$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')
-          echo "Waiting for emulator..."
         done
 
         adb shell input keyevent 82
 
-    # Build MAUI APK
+        echo "Emulator booted successfully"
+
     - name: Build MAUI Android APK
       run: |
         cd src/TicToe.Infinite
@@ -87,7 +104,6 @@ jobs:
           -p:TrimPackageSize=true \
           --self-contained false
 
-    # Install APK
     - name: Install APK
       run: |
         APK=$(find src/TicToe.Infinite/bin/Release -name "*.apk" | head -1)
@@ -96,24 +112,20 @@ jobs:
 
         adb install -r "$APK"
 
-    # Install Maestro
     - name: Install Maestro
       run: |
         curl -Ls "https://get.maestro.mobile/install.sh" | bash
         echo "$HOME/.maestro/bin" >> $GITHUB_PATH
         maestro --version
 
-    # Wait for device stability
-    - name: Wait for device
+    - name: Wait for device stabilization
       run: |
         adb devices
         sleep 10
 
-    # Run Maestro tests
     - name: Run Maestro tests
       run: |
         export MAESTRO_LOG_LEVEL=debug
-
         cd maestro-tests
 
         test_files=$(find . -name "*.yaml" | sort)
@@ -124,13 +136,12 @@ jobs:
           maestro test "$test" -p android
         done
 
-    # Capture logs if failure
-    - name: Capture logs
+    - name: Capture emulator logs
       if: failure()
       run: |
         adb logcat -d > emulator-log.txt
 
-    - name: Upload logs
+    - name: Upload failure artifacts
       if: failure()
       uses: actions/upload-artifact@v4
       with:
