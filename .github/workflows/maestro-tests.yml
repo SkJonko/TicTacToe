@@ -11,88 +11,25 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
-    env:
-      ANDROID_SDK_ROOT: /usr/local/lib/android/sdk
-      ANDROID_SDK_HOME: /home/runner/.android
-      ANDROID_AVD_HOME: /home/runner/.android/avd
-
     steps:
 
-    - name: Checkout
+    - name: Checkout repository
       uses: actions/checkout@v4
 
+    # Java required for Android tools
     - name: Setup Java
       uses: actions/setup-java@v4
       with:
         distribution: temurin
         java-version: 17
 
+    # .NET for MAUI
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
 
-    # Add Android tools to PATH
-    - name: Configure Android PATH
-      run: |
-        echo "$ANDROID_SDK_ROOT/platform-tools" >> $GITHUB_PATH
-        echo "$ANDROID_SDK_ROOT/emulator" >> $GITHUB_PATH
-        echo "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin" >> $GITHUB_PATH
-
-    # Prepare android directories
-    - name: Prepare Android directories
-      run: |
-        mkdir -p $ANDROID_SDK_HOME
-        mkdir -p $ANDROID_AVD_HOME
-
-    - name: Install Android SDK packages
-      run: |
-        sdkmanager --install \
-          "platform-tools" \
-          "platforms;android-33" \
-          "emulator" \
-          "system-images;android-33;google_apis;x86_64"
-
-    - name: Accept Android licenses
-      run: yes | sdkmanager --licenses
-
-    - name: Create Android Emulator
-      run: |
-        echo "no" | avdmanager create avd \
-          -n Pixel_API_33 \
-          -k "system-images;android-33;google_apis;x86_64" \
-          -d pixel \
-          --force
-
-        echo "Available AVDs:"
-        emulator -list-avds
-
-    - name: Start Android Emulator
-      run: |
-        adb kill-server || true
-
-        emulator -avd Pixel_API_33 \
-          -no-window \
-          -no-audio \
-          -no-snapshot \
-          -gpu swiftshader_indirect \
-          -no-boot-anim \
-          &
-
-        adb wait-for-device
-
-        echo "Waiting for emulator boot..."
-
-        boot_completed=""
-        until [[ "$boot_completed" == "1" ]]; do
-          sleep 5
-          boot_completed=$(adb shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')
-        done
-
-        adb shell input keyevent 82
-
-        echo "Emulator booted successfully"
-
+    # Build MAUI APK
     - name: Build MAUI Android APK
       run: |
         cd src/TicToe.Infinite
@@ -101,47 +38,56 @@ jobs:
           -f net8.0-android \
           -c Release \
           -p:AndroidPackageFormat=apk \
-          -p:TrimPackageSize=true \
           --self-contained false
 
-    - name: Install APK
-      run: |
-        APK=$(find src/TicToe.Infinite/bin/Release -name "*.apk" | head -1)
-
-        echo "Installing $APK"
-
-        adb install -r "$APK"
-
+    # Install Maestro CLI
     - name: Install Maestro
       run: |
         curl -Ls "https://get.maestro.mobile/install.sh" | bash
         echo "$HOME/.maestro/bin" >> $GITHUB_PATH
         maestro --version
 
-    - name: Wait for device stabilization
-      run: |
-        adb devices
-        sleep 10
+    # Start emulator + run tests
+    - name: Run Android Emulator and Tests
+      uses: ReactiveCircus/android-emulator-runner@v2
+      with:
+        api-level: 33
+        arch: x86_64
+        profile: pixel
+        emulator-options: -no-window -no-audio -no-boot-anim
+        script: |
 
-    - name: Run Maestro tests
-      run: |
-        export MAESTRO_LOG_LEVEL=debug
-        cd maestro-tests
+          echo "Emulator started"
 
-        test_files=$(find . -name "*.yaml" | sort)
+          adb devices
 
-        for test in $test_files
-        do
-          echo "Running $test"
-          maestro test "$test" -p android
-        done
+          APK=$(find src/TicToe.Infinite/bin/Release -name "*.apk" | head -1)
 
-    - name: Capture emulator logs
+          echo "Installing $APK"
+
+          adb install -r "$APK"
+
+          sleep 10
+
+          cd maestro-tests
+
+          export MAESTRO_LOG_LEVEL=debug
+
+          test_files=$(find . -name "*.yaml" | sort)
+
+          for test in $test_files
+          do
+            echo "Running $test"
+            maestro test "$test" -p android
+          done
+
+    # Capture logs if tests fail
+    - name: Capture logs
       if: failure()
       run: |
         adb logcat -d > emulator-log.txt
 
-    - name: Upload failure artifacts
+    - name: Upload logs
       if: failure()
       uses: actions/upload-artifact@v4
       with:
