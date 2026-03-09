@@ -29,17 +29,21 @@ jobs:
       with:
         dotnet-version: 10.0.x
 
-    # Install MAUI workload
-    - name: Install MAUI workload
+    # Install only the Android MAUI workload (iOS not supported on Linux runners)
+    - name: Install MAUI Android workload
       working-directory: src/TicToe.Infinite
-      run: dotnet workload restore
+      run: |
+        dotnet workload install maui-android || true
+        # also restore packages for project (scoped to android below)
+        dotnet restore -f net10.0-android
 
-    # Build MAUI APK
+    # Build MAUI APK (Android only)
     - name: Build MAUI Android APK
       working-directory: src/TicToe.Infinite
       run: |
         dotnet publish \
           -f net10.0-android \
+          -p:TargetFrameworks=net10.0-android \
           -c Release \
           -p:AndroidPackageFormat=apk \
           --self-contained false
