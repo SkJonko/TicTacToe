@@ -23,11 +23,16 @@ jobs:
         distribution: temurin
         java-version: 17
 
-    # .NET for MAUI
+    # Install .NET
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 10.0.x
+
+    # Install MAUI workload
+    - name: Install MAUI workload
+      run: |
+        dotnet workload restore
 
     # Build MAUI APK
     - name: Build MAUI Android APK
@@ -35,7 +40,7 @@ jobs:
         cd src/TicToe.Infinite
 
         dotnet publish \
-          -f net8.0-android \
+          -f net10.0-android \
           -c Release \
           -p:AndroidPackageFormat=apk \
           --self-contained false
@@ -47,7 +52,7 @@ jobs:
         echo "$HOME/.maestro/bin" >> $GITHUB_PATH
         maestro --version
 
-    # Start emulator + run tests
+    # Start emulator and run tests
     - name: Run Android Emulator and Tests
       uses: ReactiveCircus/android-emulator-runner@v2
       with:
@@ -81,11 +86,15 @@ jobs:
             maestro test "$test" -p android
           done
 
-    # Capture logs if tests fail
+    # Capture logs on failure
     - name: Capture logs
       if: failure()
       run: |
-        adb logcat -d > emulator-log.txt
+        echo "Installing adb for log capture"
+        sudo apt-get update
+        sudo apt-get install -y android-tools-adb
+
+        adb logcat -d > emulator-log.txt || true
 
     - name: Upload logs
       if: failure()
