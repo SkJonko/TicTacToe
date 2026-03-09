@@ -34,8 +34,8 @@ jobs:
       working-directory: src/TicToe.Infinite
       run: |
         dotnet workload install maui-android || true
-        # also restore packages for project (scoped to android below)
-        dotnet restore -f net10.0-android
+        # restore isn't required here; the publish step later will automatically
+        # download any NuGet packages needed for the Android target.
 
     # Build MAUI APK (Android only)
     - name: Build MAUI Android APK
