@@ -47,12 +47,24 @@ jobs:
           -c Release \
           -p:AndroidPackageFormat=apk \
           --self-contained false
+          
     # Install Maestro CLI
     - name: Install Maestro
       run: |
-        curl -Ls "https://get.maestro.mobile/install.sh" | bash
-        echo "$HOME/.maestro/bin" >> $GITHUB_PATH
-        $HOME/.maestro/bin/maestro --version
+        curl -Ls https://get.maestro.mobile/install.sh | bash
+
+        echo "Searching for Maestro binary..."
+        MAESTRO_PATH=$(find $HOME -name maestro -type f | head -n 1)
+
+        if [ -z "$MAESTRO_PATH" ]; then
+          echo "Maestro installation failed"
+          exit 1
+        fi
+
+        echo "Maestro found at $MAESTRO_PATH"
+        echo "$(dirname $MAESTRO_PATH)" >> $GITHUB_PATH
+
+        $MAESTRO_PATH --version
 
     # Start emulator and run tests
     - name: Run Android Emulator and Tests
@@ -86,7 +98,7 @@ jobs:
             maestro test "$test" -p android
           done
 
-    # Capture logs if tests fail
+    # Capture logs on failure
     - name: Capture logs
       if: failure()
       run: |
