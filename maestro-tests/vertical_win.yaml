@@ -1,0 +1,60 @@
+# Maestro Test: Vertical Win Condition
+# This test validates that a player wins when placing three consecutive marks
+# in a vertical line.
+
+appId: com.companyname.tictoe.infinite
+---
+
+# Setup: Launch app
+- launchApp
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Move 1: X places mark at (0,0) - Top-left
+- tapOn:
+    id: "MainPage_Border_FirstFirst"
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+# Move 2: O places mark at (0,1) - Top-center
+- tapOn:
+    id: "MainPage_Border_SecondFirst"
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Move 3: X places mark at (1,0) - Middle-left
+- tapOn:
+    id: "MainPage_Border_FirstSecond"
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+# Move 4: O places mark at (1,1) - Middle-center
+- tapOn:
+    id: "MainPage_Border_SecondSecond"
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Move 5: X places mark at (2,0) - Bottom-left
+# This completes vertical line: (0,0), (1,0), (2,0)
+# Game should end with X winning
+- tapOn:
+    id: "MainPage_Border_FirstThird"
+
+
+# Verify game ended with X as winner
+- assertVisible:
+    text: "X"
+
+- assertVisible:
+    text: "Player X Wins!"
+
+# Verify turn indicator no longer showing (game is over)
+- assertNotVisible:
+    text: "Player O's Turn!"
+
+

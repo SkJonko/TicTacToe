@@ -131,7 +131,7 @@
     <comment>The total Games</comment>
   </data>
   <data name="First" xml:space="preserve">
-    <value>first</value>
+    <value>First</value>
   </data>
   <data name="MainPage_EnableAI" xml:space="preserve">
     <value>Enable AI (O)</value>
@@ -152,9 +152,9 @@
     <value>Total Moves</value>
   </data>
   <data name="Second" xml:space="preserve">
-    <value>second</value>
+    <value>Second</value>
   </data>
   <data name="Third" xml:space="preserve">
-    <value>third</value>
+    <value>Third</value>
   </data>
 </root>

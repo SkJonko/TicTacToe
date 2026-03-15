@@ -1,0 +1,58 @@
+# Maestro Test: Basic Gameplay
+# This test validates that players can alternate turns and place marks correctly.
+# It also verifies that tapping occupied cells is ignored.
+
+appId: com.companyname.tictoe.infinite
+---
+
+# Setup: Launch app
+- launchApp
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Test 1: Player X places first mark in top-left cell (0,0)
+- tapOn:
+    id: "MainPage_Border_FirstFirst"
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+# Test 2: Player O places mark in top-center cell (0,1)
+- tapOn:
+    id: "MainPage_Border_SecondFirst"
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Test 3: Player X places mark in top-right cell (0,2)
+- tapOn:
+    id: "MainPage_Border_ThirdFirst"
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+# Test 4: Player O places mark in middle-left cell (1,0)
+- tapOn:
+    id: "MainPage_Border_FirstSecond"
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Test 5: Attempt to tap an occupied cell (should be ignored)
+# Trying to tap (0,0) which already has X
+- tapOn:
+    id: "MainPage_Border_FirstFirst"
+
+# Turn should remain X's Turn (not switched to O)
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Test 6: Continue game with valid move
+- tapOn:
+    id: "MainPage_Border_SecondSecond"
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+

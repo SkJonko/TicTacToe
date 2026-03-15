@@ -1,0 +1,106 @@
+# Maestro Test: Edge Case - Win Detection After Mark Removal
+# This test validates that win detection still works correctly
+# even after marks have been removed due to the FIFO rule.
+
+appId: com.companyname.tictoe.infinite
+---
+
+# Setup: Launch app
+- launchApp
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Strategy: Create a scenario where we place 3+ marks per player,
+# remove some via FIFO, then achieve a win with remaining marks
+
+# Move 1: X at (0,0) - First X mark
+- tapOn:
+    id: "MainPage_Border_FirstFirst"
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+# Move 2: O at (1,0) - First O mark
+- tapOn:
+    id: "MainPage_Border_FirstSecond"
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Move 3: X at (1,1) - Second X mark
+- tapOn:
+    id: "MainPage_Border_SecondSecond"
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+# Move 4: O at (2,0) - Second O mark
+- tapOn:
+    id: "MainPage_Border_FirstThird"
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Move 5: X at (2,1) - Third X mark
+- tapOn:
+    id: "MainPage_Border_SecondThird"
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+# Move 6: O at (0,1) - Third O mark
+- tapOn:
+    id: "MainPage_Border_SecondFirst"
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Move 7: X at (2,2) - Fourth X mark
+# This removes X's oldest mark at (0,0)
+- tapOn:
+    id: "MainPage_Border_ThirdThird"
+
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+# Move 8: O at (0,2) - Fourth O mark
+# This removes O's oldest mark at (1,0)
+- tapOn:
+    id: "MainPage_Border_ThirdFirst"
+
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Move 9: X at (0,0) (formerly removed) - Fifth X mark
+# This removes X's second oldest mark at (1,1)
+# Board now: X at (2,1), X at (2,2), X at (0,0)
+- tapOn:
+    id: "MainPage_Border_FirstFirst"
+
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+# Move 10: O at (1,1) (now empty) - Fifth O move
+# This removes O's second oldest mark at (2,0)
+- tapOn:
+    id: "MainPage_Border_FirstSecond"
+
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Move 11: X at (1,0) - Sixth X move
+# This removes X's third mark at (2,1)
+# Board now: X at (2,2), X at (0,0), X at (1,0) - vertical line!
+# Game should end with X winning
+- tapOn:
+    id: "MainPage_Border_SecondSecond"
+
+
+# Verify X won despite previous removals
+- assertVisible:
+    text: "Player X Wins!"

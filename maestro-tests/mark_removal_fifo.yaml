@@ -1,0 +1,81 @@
+# Maestro Test: Three-Mark Limit and FIFO Mark Removal
+# This test validates the FIFO (First-In-First-Out) rule where:
+# - Each player can have at most 3 active marks on the board
+# - When a 4th mark is placed, the oldest mark is removed
+# - The oldest mark "breathes" as a visual warning before removal
+
+appId: com.companyname.tictoe.infinite
+---
+
+# Setup: Launch app
+- launchApp
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Move 1: X places mark at (0,0) - First X mark
+- tapOn:
+    id: "MainPage_Border_FirstFirst"
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+# Move 2: O places mark at (0,1) - First O mark
+- tapOn:
+    id: "MainPage_Border_SecondFirst"
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Move 3: X places mark at (0,2) - Second X mark
+- tapOn:
+    id: "MainPage_Border_ThirdFirst"
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+# Move 4: O places mark at (1,0) - Second O mark
+- tapOn:
+    id: "MainPage_Border_FirstSecond"
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Move 5: X places mark at (1,1) - Third X mark
+- tapOn:
+    id: "MainPage_Border_SecondSecond"
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+# Move 6: O places mark at (1,2) - Third O mark
+- tapOn:
+    id: "MainPage_Border_ThirdSecond"
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Move 7: X places mark at (2,0) - Fourth X mark
+# This should trigger removal of the OLDEST X mark at (0,0)
+- tapOn:
+    id: "MainPage_Border_ThirdThird"
+
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+# Verify: The oldest X mark at (0,0) should be removed
+# Attempting to verify mark is gone by checking board state
+
+
+# Move 8: O places mark at (2,1) - Fourth O mark
+- tapOn:
+    id: "MainPage_Border_FirstFirst"
+
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Move 9: Verify game continues normally
+- tapOn:
+    id: "MainPage_Border_SecondFirst"

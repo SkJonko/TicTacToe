@@ -3,7 +3,7 @@ namespace TicToe.Infinite.Services;
 /// <summary>
 /// Modal Error Handler.
 /// </summary>
-public class ModalErrorHandler : IErrorHandler
+public sealed class ModalErrorHandler : IErrorHandler, IDisposable
 {
     private readonly SemaphoreSlim _semaphore = new(1, 1);
 
@@ -30,5 +30,10 @@ public class ModalErrorHandler : IErrorHandler
         {
             _semaphore.Release();
         }
+    }
+
+    public void Dispose()
+    {
+        _semaphore.Dispose();
     }
 }

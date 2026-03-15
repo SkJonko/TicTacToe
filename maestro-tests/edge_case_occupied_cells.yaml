@@ -1,0 +1,83 @@
+# Maestro Test: Edge Case - Tapping Occupied Cells
+# This test validates that tapping an occupied cell is ignored
+# and the game state remains unchanged.
+
+appId: com.companyname.tictoe.infinite
+---
+
+# Setup: Launch app
+- launchApp
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Place X mark at (0,0)
+- tapOn:
+    id: "MainPage_Border_FirstFirst"
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+# Place O mark at (0,1)
+- tapOn:
+    id: "MainPage_Border_SecondFirst"
+
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Attempt 1: Tap occupied cell (0,0) where X already is
+- tapOn:
+    id: "MainPage_Border_FirstFirst"
+
+# Verify turn didn't change (should still be X's Turn)
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Attempt 2: Tap occupied cell (0,1) where O already is
+- tapOn:
+    id: "MainPage_Border_SecondFirst"
+
+# Verify turn still didn't change (should still be X's Turn)
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Attempt 3: Place valid move and verify game continues
+- tapOn:
+    id: "MainPage_Border_ThirdFirst"
+
+# Verify turn switched to O
+- assertVisible:
+    text: "Player O's Turn!"
+
+# Attempt 4: O tries to tap cell with X
+- tapOn:
+    id: "MainPage_Border_FirstFirst"
+
+# Verify turn remained O's Turn
+- assertVisible:
+    text: "Player O's Turn!"
+
+# Attempt 5: O tries to tap cell with O
+- tapOn:
+    id: "MainPage_Border_SecondFirst"
+
+# Verify turn remained O's Turn
+- assertVisible:
+    text: "Player O's Turn!"
+
+# Attempt 6: O places valid move
+- tapOn:
+    id: "MainPage_Border_FirstSecond"
+
+# Verify turn switched back to X
+- assertVisible:
+    text: "Player X's Turn!"
+
+# Verify game is still playable and consistent
+- tapOn:
+    id: "MainPage_Border_SecondSecond"
+
+- assertVisible:
+    text: "Player O's Turn!"
+
+

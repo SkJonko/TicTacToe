@@ -28,7 +28,7 @@
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <Label Grid.Row="0" SemanticProperties.HeadingLevel="Level1" Style="{StaticResource Title2}">
+                    <Label Grid.Row="0" AutomationId="Dashboard_Label_TotalGames" SemanticProperties.HeadingLevel="Level1" Style="{StaticResource Title2}">
                         <Label.FormattedText>
                             <FormattedString>
                                 <Span Text="{x:Static strings:AppResources.DashboardPage_TotalGames}" />
@@ -37,9 +37,9 @@
                         </Label.FormattedText>
                     </Label>
 
-                    <controls:GameChart Grid.Row="1" />
+                    <controls:GameChart Grid.Row="1" AutomationId="Dashboard_GameChart" />
 
-                    <controls:MovesChart Grid.Row="2" />
+                    <controls:MovesChart Grid.Row="2" AutomationId="Dashboard_MovesChart" />
                 </Grid>
             </ScrollView>
         </pullToRefresh:SfPullToRefresh.PullableContent>
