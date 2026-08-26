@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFrameworks>net10.0-android;net10.0-ios;net10.0-maccatalyst</TargetFrameworks>
@@ -25,7 +25,7 @@
 		<ApplicationTitle>TicToe.Infinite</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.tictoe.infinite</ApplicationId>
+		<ApplicationId>com.skjonko.tictoe.infinite</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>

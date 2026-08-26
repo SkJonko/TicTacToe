@@ -1,0 +1,25 @@
+name: Build Android Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_name:
+        description: 'Version name (e.g. 1.0) the last integer will be automatically incremented based on the pipeline build number'
+        required: true
+        default: '1.0'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    uses: SkJonko/Centralized-Workflow-YAMLs/.github/workflows/android-release.yaml@main
+    with:
+      project_path: 'src/TicToe.Infinite/TicToe.Infinite.csproj'
+      version_name: ${{ github.event.inputs.version_name }}
+      release_title: 'Tic Toe Infinite Release'
+    secrets:
+      KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+      KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+      KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+      KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE }}
